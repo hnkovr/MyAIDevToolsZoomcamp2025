@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}TODO List{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>My TODO List</h1>
+            <a href="{% url 'todo_create' %}" class="btn btn-primary">+ Add New TODO</a>
+        </div>
+
+        {% if todos %}
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Pending Tasks</h3>
+                    {% for todo in todos %}
+                        {% if not todo.is_resolved %}
+                        <div class="todo-item {% if todo.due_date and todo.due_date < today %}overdue{% endif %}">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="flex-grow-1">
+                                    <h5 class="todo-title mb-2">{{ todo.title }}</h5>
+                                    {% if todo.description %}
+                                    <p class="text-muted mb-2">{{ todo.description }}</p>
+                                    {% endif %}
+                                    {% if todo.due_date %}
+                                    <small class="{% if todo.due_date < today %}text-danger{% else %}text-muted{% endif %}">
+                                        Due: {{ todo.due_date|date:"M d, Y" }}
+                                    </small>
+                                    {% endif %}
+                                </div>
+                                <div class="btn-group">
+                                    <a href="{% url 'todo_toggle' todo.pk %}" class="btn btn-sm btn-success" title="Mark as done">✓</a>
+                                    <a href="{% url 'todo_update' todo.pk %}" class="btn btn-sm btn-warning" title="Edit">✎</a>
+                                    <a href="{% url 'todo_delete' todo.pk %}" class="btn btn-sm btn-danger" title="Delete">✗</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div class="col-md-6">
+                    <h3>Completed Tasks</h3>
+                    {% for todo in todos %}
+                        {% if todo.is_resolved %}
+                        <div class="todo-item resolved">
+                            <div class="d-flex justify-content-between align-items-start">
+                                <div class="flex-grow-1">
+                                    <h5 class="todo-title mb-2">{{ todo.title }}</h5>
+                                    {% if todo.description %}
+                                    <p class="text-muted mb-2">{{ todo.description }}</p>
+                                    {% endif %}
+                                    {% if todo.due_date %}
+                                    <small class="text-muted">Due: {{ todo.due_date|date:"M d, Y" }}</small>
+                                    {% endif %}
+                                </div>
+                                <div class="btn-group">
+                                    <a href="{% url 'todo_toggle' todo.pk %}" class="btn btn-sm btn-secondary" title="Mark as pending">↺</a>
+                                    <a href="{% url 'todo_update' todo.pk %}" class="btn btn-sm btn-warning" title="Edit">✎</a>
+                                    <a href="{% url 'todo_delete' todo.pk %}" class="btn btn-sm btn-danger" title="Delete">✗</a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <h4>No todos yet!</h4>
+                <p>Start by creating your first TODO item.</p>
+                <a href="{% url 'todo_create' %}" class="btn btn-primary">Create TODO</a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
