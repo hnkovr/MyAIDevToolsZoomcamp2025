@@ -20,8 +20,42 @@ A full-featured TODO application built with Django, demonstrating CRUD operation
 ### Prerequisites
 - Python 3.13
 - uv package manager
+- (Optional) [just](https://github.com/casey/just) - command runner for task automation
 
 ### Installation
+
+#### Option A: Using Just (Recommended)
+
+1. Clone the repository:
+```bash
+git clone https://github.com/hnkovr/MyAIDevToolsZoomcamp2025.git
+cd MyAIDevToolsZoomcamp2025
+```
+
+2. Install just (if not already installed):
+```bash
+# macOS
+brew install just
+
+# Linux
+cargo install just
+```
+
+3. Run full setup:
+```bash
+just setup
+```
+
+4. Start the development server:
+```bash
+just run
+```
+
+5. Open your browser and navigate to:
+   - Main app: http://127.0.0.1:8000/
+   - Admin panel: http://127.0.0.1:8000/admin/
+
+#### Option B: Manual Setup
 
 1. Clone the repository:
 ```bash
@@ -53,15 +87,41 @@ uv run python manage.py runserver
    - Main app: http://127.0.0.1:8000/
    - Admin panel: http://127.0.0.1:8000/admin/
 
+## Using Just Commands
+
+This project includes a Justfile with many useful commands. Run `just` to see all available commands.
+
+### Common Commands
+
+```bash
+just                  # Show all available commands
+just run              # Run development server
+just test             # Run all tests
+just test-verbose     # Run tests with verbose output
+just dev              # Run migrations and start server
+just shell            # Open Django shell
+just clean            # Clean Python cache files
+just info             # Show project information
+just pre-commit       # Run all checks before committing
+```
+
+See the [Justfile](Justfile) for all available commands.
+
 ## Running Tests
 
 Run the complete test suite:
 ```bash
+# Using Just
+just test
+
+# Or manually
 uv run python manage.py test
 ```
 
 Run with verbose output:
 ```bash
+just test-verbose
+# Or manually
 uv run python manage.py test --verbosity=2
 ```
 
