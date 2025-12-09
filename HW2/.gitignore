@@ -1,0 +1,19 @@
+# Node
+node_modules/
+dist/
+.cache/
+npm-debug.log*
+
+# Env/OS
+.env
+.env.*
+.DS_Store
+
+# Editor/IDE
+.idea/
+.vscode/
+
+# Project
+server/public/
+data/
+.venv/

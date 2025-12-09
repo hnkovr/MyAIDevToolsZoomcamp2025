@@ -5,10 +5,11 @@
 ## Статус
 - На текущий момент создана структура и документация. Кодовая база будет добавлена согласно плану из `PLAN.md` и `TODO.md`.
 
-## Быстрый старт (план)
-- Dev: `npm run dev` (root) — запускает client и server (через `concurrently`).
-- Тесты сервера: `npm --prefix server test`.
-- Сборка клиента: `npm --prefix client run build` (статические файлы раздаются Express).
+## Быстрый старт
+- Dev (оба): `npm run dev` — запускает client и server через `concurrently`.
+- Тесты сервера: `npm --prefix server test` (Vitest, HTTP+WS integration).
+- Сборка клиента: `npm --prefix client run build` (Express раздаёт `server/public`).
+- Docker (локально): `docker build -t hw2 . && docker run -p 8080:8080 hw2`.
 
 ## Документация и дорожная карта
 - План: `docs/PLAN.md`
@@ -23,4 +24,10 @@
 - Docker (для контейнеризации), опционально.
 
 ## Roadmap (высокоуровневый)
-- Реалтайм Socket.IO → Редактор CodeMirror → Выполнение JS/Pyodide → Тесты → Единый dev → Билд/статик → Docker → Деплой.
+ - Реалтайм Socket.IO → Редактор CodeMirror → Выполнение JS/Pyodide → Тесты → Единый dev → Билд/статик → Docker → Деплой.
+
+## Ответы ДЗ (ориентиры)
+- Q2 (тесты): `npm --prefix server test`
+- Q3 (оба): `npm run dev` (`concurrently -k -n client,server "npm:dev:client" "npm:dev:server"`)
+- Q4 (подсветка): CodeMirror 6 (`@uiw/react-codemirror`, `@codemirror/lang-*`)
+- Q5 (Python→WASM): Pyodide (через web worker)

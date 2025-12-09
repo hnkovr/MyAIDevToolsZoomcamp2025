@@ -162,7 +162,6 @@ You can sign up here: https://github.com/DataTalksClub/ai-dev-tools-zoomcamp/
 
 ### Example post for Twitter/X:
 
-
 ```
 🤖 Built a collaborative coding platform with AI!
 
