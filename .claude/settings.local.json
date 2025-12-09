@@ -5,7 +5,9 @@
       "Bash(uv add:*)",
       "Bash(uv run:*)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(command -v:*)",
+      "Bash(just:*)"
     ],
     "deny": [],
     "ask": []
