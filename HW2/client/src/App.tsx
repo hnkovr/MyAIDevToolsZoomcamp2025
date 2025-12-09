@@ -6,7 +6,7 @@ import { python } from '@codemirror/lang-python'
 
 type Lang = 'javascript' | 'python'
 
-const serverUrl = (import.meta as any).env?.VITE_API_BASE || 'http://localhost:8080'
+const serverUrl = (import.meta as any).env?.VITE_API_BASE || window.location.origin
 
 function getOrCreateSessionId() {
   const url = new URL(window.location.href)
@@ -138,4 +138,3 @@ async function runPy(source: string): Promise<{ ok: boolean; output: string }> {
     }, 100)
   })
 }
-

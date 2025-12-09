@@ -31,3 +31,15 @@
 - Q3 (оба): `npm run dev` (`concurrently -k -n client,server "npm:dev:client" "npm:dev:server"`)
 - Q4 (подсветка): CodeMirror 6 (`@uiw/react-codemirror`, `@codemirror/lang-*`)
 - Q5 (Python→WASM): Pyodide (через web worker)
+
+## Переменные окружения
+- Client: `client/.env` — `VITE_API_BASE` (например, `http://localhost:8080`). Если не задано, клиент использует `window.location.origin`.
+- Server: `server/.env` — `PORT` (по умолчанию `8080`). Примеры: `server/.env.example`, `conf/.env.example`.
+
+## CI
+- GitHub Actions: `.github/workflows/ci.yml` — серверные тесты и билд клиента на push/PR.
+
+## Деплой
+- Render (Docker): см. `docs/deploy-render.md` и `render.yaml`.
+- Railway: см. `docs/deploy-railway.md`.
+- Fly.io: см. `docs/deploy-flyio.md` и `fly.toml`.
