@@ -1,0 +1,59 @@
+# just: Task runner for HW2 Coding Interview Platform
+
+set shell := ["bash", "-eu", "-o", "pipefail", "-c"]
+
+ROOT := justfile_directory()
+PORT ?= "8080"
+IMAGE ?= "hw2"
+
+default: help
+
+help:
+  @echo "Available recipes:"
+  @echo "  install          - Install root dev deps (concurrently)"
+  @echo "  bootstrap        - Install client/server deps if present"
+  @echo "  dev              - Run client and server concurrently"
+  @echo "  test             - Run server tests (Vitest)"
+  @echo "  build            - Build client (Vite)"
+  @echo "  stage            - Copy client/dist to server/public"
+  @echo "  smoke            - Run basic repo smoke checks"
+  @echo "  docker-build     - Build Docker image ('$(IMAGE)')"
+  @echo "  docker-run       - Run Docker image on port $(PORT)"
+
+# Install root dev dependencies (concurrently, wait-on)
+install:
+  npm install
+
+# Install client and server dependencies if folders exist
+bootstrap:
+  bash scripts/bootstrap.sh
+
+# Run both client and server concurrently
+dev:
+  npm run dev
+
+# Run server integration tests
+test:
+  npm --prefix server test
+
+# Build client assets
+build:
+  npm --prefix client run build
+
+# Stage built client into server/public for static serve
+stage:
+  mkdir -p server/public
+  cp -r client/dist/* server/public/ || true
+
+# Quick smoke checks
+smoke:
+  bash scripts/tests/smoke.sh
+
+# Build docker image
+docker-build IMAGE?=hw2:
+  docker build -t {{IMAGE}} .
+
+# Run docker image
+docker-run IMAGE?=hw2 PORT?=8080:
+  docker run --rm -p {{PORT}}:8080 {{IMAGE}}
+
