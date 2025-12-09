@@ -37,9 +37,13 @@
 - Server: `server/.env` — `PORT` (по умолчанию `8080`). Примеры: `server/.env.example`, `conf/.env.example`.
 
 ## CI
-- GitHub Actions: `.github/workflows/ci.yml` — серверные тесты и билд клиента на push/PR.
+- GitHub Actions: 
+  - `.github/workflows/ci.yml` — серверные тесты и билд клиента на push/PR.
+  - `.github/workflows/pages.yml` — клиент на GitHub Pages (нужен секрет `PAGES_API_BASE`).
+  - `.github/workflows/deploy-render.yml` — деплой в Render (нужны `RENDER_API_KEY`, `RENDER_SERVICE_ID`).
 
 ## Деплой
 - Render (Docker): см. `docs/deploy-render.md` и `render.yaml`.
 - Railway: см. `docs/deploy-railway.md`.
 - Fly.io: см. `docs/deploy-flyio.md` и `fly.toml`.
+ - GitHub Pages (client only): `.github/workflows/pages.yml` публикует `client/dist`; укажите секрет `PAGES_API_BASE` на адрес вашего сервера.
