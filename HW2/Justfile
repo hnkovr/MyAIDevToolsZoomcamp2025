@@ -1,6 +1,7 @@
 # just: Task runner for HW2 Coding Interview Platform
 
-set shell := ["bash", "-eu", "-o", "pipefail", "-c"]
+##? set shell := ["bash", "-eu", "-o", "pipefail", "-c"]
+set shell := ["bash", "-o", "pipefail", "-c"]
 
 ROOT := justfile_directory()
 PORT := '8080'
@@ -12,6 +13,18 @@ if ! command -v npm >/dev/null 2>&1; then
   echo "[error] npm not found. Install Node.js 20+ (e.g., 'brew install node@20' or nvm)." >&2
   exit 127
 fi
+'''
+
+# Common bash headers
+BASH_HEADER := '''
+#!/usr/bin/env bash
+set -euo pipefail
+'''
+
+BASH_HEADER_WITH_NPM := '''
+#!/usr/bin/env bash
+set -euo pipefail
+''' + NPM_CHECK + '''
 '''
 
 default: help
@@ -31,16 +44,12 @@ help:
 
 # Install root dev dependencies (concurrently, wait-on)
 install:
-  #!/usr/bin/env bash
-  set -euo pipefail
-  {{NPM_CHECK}}
+  {{BASH_HEADER_WITH_NPM}}
   npm install
 
 # Install client and server dependencies if folders exist
 bootstrap:
-  #!/usr/bin/env bash
-  set -euo pipefail
-  {{NPM_CHECK}}
+  {{BASH_HEADER_WITH_NPM}}
   bash scripts/bootstrap.sh
 
 # Run both client and server concurrently
@@ -66,9 +75,10 @@ smoke:
 
 # Check environment prerequisites
 doctor:
-  @bash -lc 'printf "node: "; if command -v node >/dev/null 2>&1; then node -v; else echo "missing"; fi'
-  @bash -lc 'printf "npm:  "; if command -v npm  >/dev/null 2>&1; then npm  -v; else echo "missing"; fi'
-  @bash -lc 'printf "docker: "; if command -v docker >/dev/null 2>&1; then docker -v; else echo "missing (optional)"; fi'
+  {{BASH_HEADER}}
+  printf "node: "; if command -v node >/dev/null 2>&1; then node -v; else echo "missing"; fi
+  printf "npm:  "; if command -v npm  >/dev/null 2>&1; then npm  -v; else echo "missing"; fi
+  printf "docker: "; if command -v docker >/dev/null 2>&1; then docker -v; else echo "missing (optional)"; fi
 
 # Build docker image
 docker-build IMAGE='hw2':
