@@ -3,8 +3,16 @@
 set shell := ["bash", "-eu", "-o", "pipefail", "-c"]
 
 ROOT := justfile_directory()
-PORT ?= "8080"
-IMAGE ?= "hw2"
+PORT := '8080'
+IMAGE := 'hw2'
+
+# Reusable shell snippet to ensure npm is available
+NPM_CHECK := '''
+if ! command -v npm >/dev/null 2>&1; then
+  echo "[error] npm not found. Install Node.js 20+ (e.g., 'brew install node@20' or nvm)." >&2
+  exit 127
+fi
+'''
 
 default: help
 
@@ -17,15 +25,22 @@ help:
   @echo "  build            - Build client (Vite)"
   @echo "  stage            - Copy client/dist to server/public"
   @echo "  smoke            - Run basic repo smoke checks"
-  @echo "  docker-build     - Build Docker image ('$(IMAGE)')"
-  @echo "  docker-run       - Run Docker image on port $(PORT)"
+  @echo "  docker-build     - Build Docker image (IMAGE=hw2 by default)"
+  @echo "  docker-run       - Run Docker image on port 8080 (override PORT)"
+  @echo "  doctor           - Check prerequisites (node, npm, docker)"
 
 # Install root dev dependencies (concurrently, wait-on)
 install:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  {{NPM_CHECK}}
   npm install
 
 # Install client and server dependencies if folders exist
 bootstrap:
+  #!/usr/bin/env bash
+  set -euo pipefail
+  {{NPM_CHECK}}
   bash scripts/bootstrap.sh
 
 # Run both client and server concurrently
@@ -49,11 +64,16 @@ stage:
 smoke:
   bash scripts/tests/smoke.sh
 
+# Check environment prerequisites
+doctor:
+  @bash -lc 'printf "node: "; if command -v node >/dev/null 2>&1; then node -v; else echo "missing"; fi'
+  @bash -lc 'printf "npm:  "; if command -v npm  >/dev/null 2>&1; then npm  -v; else echo "missing"; fi'
+  @bash -lc 'printf "docker: "; if command -v docker >/dev/null 2>&1; then docker -v; else echo "missing (optional)"; fi'
+
 # Build docker image
-docker-build IMAGE?=hw2:
+docker-build IMAGE='hw2':
   docker build -t {{IMAGE}} .
 
 # Run docker image
-docker-run IMAGE?=hw2 PORT?=8080:
+docker-run IMAGE='hw2' PORT='8080':
   docker run --rm -p {{PORT}}:8080 {{IMAGE}}
-
